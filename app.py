@@ -55,9 +55,22 @@ def get_guides():
 # Endpoint for querying a single guide
 @app.route("/guide/<id>", methods=["GET"])
 def get_guide(id):
-    guide = Guide.query.get(id)
-    return guide_schema.jsonify(guide)
+  guide = Guide.query.get(id)
+  return guide_schema.jsonify(guide)
 
+
+# Endpoint for updating a guide
+@app.route("/guide/<id>", methods=["PUT"])
+def guide_update(id):
+  guide = Guide.query.get(id)
+  title = request.json['title']
+  content = request.json['content']
+
+  guide.title = title
+  guide.content = content
+
+  db.session.commit()
+  return guide_schema.jsonify(guide)
 
 if __name__ == '__main__':
   app.run(debug=True)
